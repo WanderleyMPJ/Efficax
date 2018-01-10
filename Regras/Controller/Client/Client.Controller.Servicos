@@ -1,0 +1,64 @@
+unit Client.Controller.Servicos;
+
+interface
+
+uses
+  FMX.ListView, System.Generics.Collections,
+  Data.Bind.Components, Data.Bind.ObjectScope, Datasnap.DSClientRest,
+  Cliente.Rest, Data.DB,
+
+  entidade.Servico, Model.Util, Client.Controller.Interf;
+
+Type
+
+  TServicoController = class(TInterfacedObject, iMetodos)
+  private
+    FRestCli: TSMCadastrosClient;
+    function getRestCon: TDSRestConnection;
+    property RestCon: TDSRestConnection read getRestCon;
+  public
+    Constructor Create;
+    Destructor Destroy; override;
+    class function New: iMetodos;
+    function Listar(aDataset: TDataSet; Filtro: string): iMetodos;
+  end;
+
+implementation
+
+uses
+  FMX.ListView.Types, System.Rtti, Cliente.Servico.Model,
+  Cliente.Conection.Model, entidade.Model, System.Classes, ormbr.Rest.json;
+
+{ TServicoController }
+
+Constructor TServicoController.Create;
+begin
+  FRestCli := TSMCadastrosClient.Create(RestCon);
+end;
+
+destructor TServicoController.Destroy;
+begin
+
+  inherited;
+end;
+
+function TServicoController.getRestCon: TDSRestConnection;
+begin
+  Result := TConectionModel.New.RestCon;
+end;
+
+class function TServicoController.New: iMetodos;
+begin
+  Result := self.Create;
+end;
+
+function TServicoController.Listar(aDataset: TDataSet; Filtro: string): iMetodos;
+var
+  LJson: string;
+begin
+  LJson := FRestCli.ServicoGet(Filtro);
+  TUtil.JsonToDataset(aDataset, LJson);
+  Result := self;
+end;
+
+end.

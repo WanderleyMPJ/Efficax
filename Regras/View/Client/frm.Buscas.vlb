@@ -1,0 +1,14 @@
+﻿[ListBox1]
+Coordinates=10,10,116,177
+Visible=True
+
+[]
+Coordinates=145,71,82,33
+Visible=True
+
+[AdapterBindSource1]
+Coordinates=145,1,116,51
+
+[BindingsList1]
+Coordinates=145,71,82,33
+

@@ -1,0 +1,75 @@
+inherited frmServicos: TfrmServicos
+  Caption = 'frmPai1'
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  inherited lytBase: TLayout
+    inherited ToolBar1: TToolBar
+      inherited lblTitulo: TLabel
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+      end
+    end
+    inherited tbcGeral: TTabControl
+      TabIndex = 1
+      Sizes = (
+        595s
+        439s
+        595s
+        439s)
+      inherited tbiListar: TTabItem
+        IsSelected = False
+        ExplicitSize.cx = 59.000000000000000000
+        ExplicitSize.cy = 30.000000000000000000
+        inherited Panel2: TPanel
+          inherited stgLista: TStringGrid
+            Viewport.Width = 563.000000000000000000
+            Viewport.Height = 318.000000000000000000
+          end
+        end
+      end
+      inherited tbiDados: TTabItem
+        IsSelected = True
+        ExplicitSize.cx = 67.000000000000000000
+        ExplicitSize.cy = 30.000000000000000000
+        inherited Panel3: TPanel
+          object edtId: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 0
+            Position.X = 32.000000000000000000
+            Position.Y = 40.000000000000000000
+            Enabled = False
+            Size.Width = 57.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+            object Label3: TLabel
+              AutoSize = True
+              Position.Y = -21.000000000000000000
+              Size.Width = 33.000000000000000000
+              Size.Height = 22.000000000000000000
+              Size.PlatformDefault = False
+              Text = 'Id:'
+              TabOrder = 0
+            end
+          end
+        end
+        object edtDescricao: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 1
+          Position.X = 40.000000000000000000
+          Position.Y = 120.000000000000000000
+          Size.Width = 321.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          object Label4: TLabel
+            AutoSize = True
+            Position.Y = -21.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Descri'#231#227'o:'
+            TabOrder = 0
+          end
+        end
+      end
+    end
+  end
+end

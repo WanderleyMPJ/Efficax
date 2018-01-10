@@ -1,0 +1,34 @@
+inherited frmServicos: TfrmServicos
+  Caption = 'frmCadPadrao1'
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  inherited lytBase: TLayout
+    inherited tblTitulo: TToolBar
+      inherited lblTitulo: TLabel
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+      end
+    end
+    inherited tbcOperacao: TTabControl
+      TabIndex = 1
+      Sizes = (
+        640s
+        434s
+        640s
+        434s)
+      inherited tbiLista: TTabItem
+        IsSelected = False
+        ExplicitSize.cx = 12.000000000000000000
+        ExplicitSize.cy = 12.000000000000000000
+        inherited stgListar: TStringGrid
+          Viewport.Width = 640.000000000000000000
+          Viewport.Height = 378.000000000000000000
+        end
+      end
+      inherited tbiDados: TTabItem
+        IsSelected = True
+        ExplicitSize.cx = 12.000000000000000000
+        ExplicitSize.cy = 12.000000000000000000
+      end
+    end
+  end
+end
