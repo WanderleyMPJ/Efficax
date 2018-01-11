@@ -18,7 +18,7 @@ Type
 
   iServerControllerDao = interface
     ['{CC07F1EA-1743-4E53-8775-2F452EBEAC77}']
-    function Pessoa: iServerControllerMetodos;
+    function Pessoas: iServerControllerMetodos;
     function Servico: iServerControllerMetodos;
     function ServicoGrupo: iServerControllerMetodos;
   end;

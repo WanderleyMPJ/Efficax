@@ -13,7 +13,7 @@ Type
     constructor Create(const ACon: iConexaoModel);
     destructor Destroy; override;
     class function New(const ACon: iConexaoModel): iServerControllerDao;
-    function Pessoa: iServerControllerMetodos;
+    function Pessoas: iServerControllerMetodos;
     function Servico: iServerControllerMetodos;
     function ServicoGrupo: iServerControllerMetodos;
 
@@ -22,7 +22,8 @@ Type
 implementation
 
 uses
-  Server.Controller.Dao.Servico, Servidor.Controller.Servico.Grupo;
+  Server.Controller.Dao.Servico, Servidor.Controller.Servico.Grupo,
+  Servidor.Controller.Pessoas;
 
 { TControllerDao }
 
@@ -42,9 +43,9 @@ begin
   Result := self.Create(ACon);
 end;
 
-function TControllerDao.Pessoa: iServerControllerMetodos;
+function TControllerDao.Pessoas: iServerControllerMetodos;
 begin
-
+  Result := TServerControllerDaoPessoas.New(FCon);
 end;
 
 function TControllerDao.Servico: iServerControllerMetodos;

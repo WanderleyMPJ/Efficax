@@ -1,4 +1,4 @@
-unit Entidade.Pessoa.Telefone;
+unit Entidade.Pessoas.Telefones;
 
 interface
 

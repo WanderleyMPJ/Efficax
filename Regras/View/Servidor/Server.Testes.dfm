@@ -20,7 +20,6 @@ object frmTestes: TfrmTestes
     Height = 25
     Caption = 'Build Database'
     TabOrder = 0
-    OnClick = Button1Click
   end
   object Memo1: TMemo
     Left = 160

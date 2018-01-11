@@ -11,7 +11,8 @@ type
     DSServer1: TDSServer;
     DSAuthenticationManager1: TDSAuthenticationManager;
     DSServerClass1: TDSServerClass;
-    procedure DSServerClass1GetClass(DSServerClass: TDSServerClass;
+
+    procedure dscCadastrosGetClass(DSServerClass: TDSServerClass;
       var PersistentClass: TPersistentClass);
     procedure DSAuthenticationManager1UserAuthorize(Sender: TObject;
       EventObject: TDSAuthorizeEventObject; var valid: Boolean);
@@ -20,7 +21,16 @@ type
       UserRoles: TStrings);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
+    procedure DSServerClass1GetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
   private
+    FdscCadastros: TDSServerClass;
+
+    procedure CadastrosGetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
+
+
+
     class var FSession: TDictionary<string, TObject>;
 
   public
@@ -55,11 +65,17 @@ begin
   Result := FDSAuthenticationManager;
 end;
 
+procedure TSc.CadastrosGetClass(DSServerClass: TDSServerClass;
+  var PersistentClass: TPersistentClass);
+begin
+  PersistentClass := Server.SM.Cadastros.TSMCadastros;
+end;
+
 constructor TSc.Create(AOwner: TComponent);
 begin
   inherited;
-  FDSServer := DSServer1;
-  FDSAuthenticationManager := DSAuthenticationManager1;
+  FDSServer                 := DSServer1;
+  FDSAuthenticationManager  := DSAuthenticationManager1;
 end;
 
 procedure TSc.DataModuleCreate(Sender: TObject);
@@ -80,8 +96,14 @@ begin
   FDSAuthenticationManager := nil;
 end;
 
-procedure TSc.DSServerClass1GetClass(
+procedure TSc.dscCadastrosGetClass(
   DSServerClass: TDSServerClass; var PersistentClass: TPersistentClass);
+begin
+  PersistentClass := Server.SM.Cadastros.TSMCadastros;
+end;
+
+procedure TSc.DSServerClass1GetClass(DSServerClass: TDSServerClass;
+  var PersistentClass: TPersistentClass);
 begin
   PersistentClass := Server.SM.Cadastros.TSMCadastros;
 end;

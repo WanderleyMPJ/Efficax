@@ -1,26 +1,31 @@
-unit Entidade.Pessoa;
+unit Entidade.Pessoas;
 
 interface
 
 uses
 
-  Generics.Collections, db,
+  Classes,
+  DB,
+  SysUtils,
+  Generics.Collections,
   /// orm
   ormbr.mapping.attributes,
-  ormbr.types.mapping,
-  ormbr.types.lazy,
   ormbr.types.nullable,
-  ormbr.mapping.register, System.Classes, System.Generics.Collections,
-  Entidade.Interf, Entidade.Pessoa.Telefone;
+  ormbr.types.mapping,
+  ormbr.mapping.register,
+  ormbr.types.blob, Entidade.Interf
+
+  //efficax
+  , Entidade.Pessoas.Telefones;
 
 Type
 
   [Entity]
-  [Table('Pessoas', 'Tabela de Pessoas')]
-  [PrimaryKey('Pessoas_Id', AutoInc, NoSort, False, 'Chave primária')]
-  [Indexe('IDX_Nome','Nome', NoSort, True, 'Indexe por nome')]
-  [Sequence('PESSOAS_SEQ')]
-  TPessoa = class(TInterfacedObject, iEntidade)
+  [Table('Pessoas', '')]
+  [PrimaryKey('Pessoas_Id', AutoInc, NoSort, True, 'Chave primária')]
+  [Indexe('idx_Pessoas_Nome','Nome')]
+  [Sequence('seq_PESSOAS')]
+  TPessoas = class(TInterfacedObject, iEntidade)
   private
     FPessoas_ID: integer;
     FNome: string;
@@ -34,7 +39,7 @@ Type
 
     [Restrictions([NoUpdate, NotNull])]
     [Column('Pessoas_Id', ftInteger)]
-    [Dictionary('Código ID', 'Mensagem de validação', '0', '', '', taCenter)]
+    [Dictionary('Pessoas_ID', 'Mensagem de validação', '', '', '', taCenter)]
     property Pessoas_ID: integer index 0 read FPessoas_ID write FPessoas_ID;
 
     [Column('Nome', ftString, 100)]
@@ -57,24 +62,27 @@ implementation
 
 { TPessoasModel }
 
-constructor TPessoa.Create;
+constructor TPessoas.Create;
 begin
-
+  FTelefones := TObjectList<TTelefone>.create;
 end;
 
-destructor TPessoa.Destroy;
+destructor TPessoas.Destroy;
+var
+  i: Integer;
 begin
-
+  for i := 0 to FTelefones.Count - 1 do
+    FTelefones[i].Free;
   inherited;
 end;
 
-procedure TPessoa.SetTelefones(const Value: TObjectList<TTelefone>);
+procedure TPessoas.SetTelefones(const Value: TObjectList<TTelefone>);
 begin
   FTelefones := Value;
 end;
 
 initialization
 
-TRegisterClass.RegisterEntity(TPessoa);
+TRegisterClass.RegisterEntity(TPessoas);
 
 end.

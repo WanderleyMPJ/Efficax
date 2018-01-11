@@ -25,7 +25,12 @@ uses
   Server.Controller.Dao.Servico in '..\..\Regras\Controller\Servidor\Server.Controller.Dao.Servico.pas',
   Servidor.Controller.Servico in '..\..\Regras\Controller\Servidor\Cadastros\Servidor.Controller.Servico.pas',
   Entidade.Servico.Grupo in '..\..\Regras\Model\Entidades\Cadastros\Entidade.Servico.Grupo.pas',
-  Servidor.Controller.Servico.Grupo in '..\..\Regras\Controller\Servidor\Cadastros\Servidor.Controller.Servico.Grupo.pas';
+  Servidor.Controller.Servico.Grupo in '..\..\Regras\Controller\Servidor\Cadastros\Servidor.Controller.Servico.Grupo.pas',
+  Entidade.Pessoas in '..\..\Regras\Model\Entidades\Cadastros\Entidade.Pessoas.pas',
+  Entidade.Pessoas.Telefones in '..\..\Regras\Model\Entidades\Cadastros\Entidade.Pessoas.Telefones.pas',
+  Model.Dao.OrmBr in '..\..\Regras\Model\Dao\Model.Dao.OrmBr.pas',
+  Model.Dao.Interf in '..\..\Regras\Model\Dao\Model.Dao.Interf.pas',
+  Servidor.Controller.Pessoas in '..\..\Regras\Controller\Servidor\Cadastros\Servidor.Controller.Pessoas.pas';
 
 {$R *.res}
 

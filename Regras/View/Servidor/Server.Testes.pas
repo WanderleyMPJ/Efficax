@@ -21,7 +21,6 @@ type
     Button1: TButton;
     Memo1: TMemo;
     FDConnection1: TFDConnection;
-    procedure Button1Click(Sender: TObject);
   private
     fdb: TFDConnection;
     oConnection: IDBCONNECTION;
@@ -52,14 +51,6 @@ begin
   oManager.BuildDatabase;
   for cDDL in oManager.GetCommandList do
       Memo1.Lines.Add(cDDL.Command);
-end;
-
-procedure TfrmTestes.Button1Click(Sender: TObject);
-begin
-//  CriarFd;
-//  CriarConection;
-//  Build;
-  db.CriarBanco;
 end;
 
 procedure TfrmTestes.CriarConection;

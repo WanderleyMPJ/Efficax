@@ -98,7 +98,7 @@ procedure TfrmPrincipal.StartBanco;
 begin
 //  Firebird.CriarBanco;
 //  sqLite.CriarBanco;
-  db.CriarBanco;
+//  db.CriarBanco;
 end;
 
 procedure TfrmPrincipal.StartServer;

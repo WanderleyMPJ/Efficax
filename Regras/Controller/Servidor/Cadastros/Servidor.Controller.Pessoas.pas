@@ -1,4 +1,4 @@
-unit Servidor.Controller.Servico.Grupo;
+unit Servidor.Controller.Pessoas;
 
 interface
 
@@ -6,13 +6,13 @@ uses
   Server.Controller.Interf, Server.Model.Conexao.Interf, System.JSON,
   ormbr.container.objectset.interfaces,
 
-  Entidade.Servico.Grupo, Model.Dao.Interf, Model.Dao.OrmBr;
+  Entidade.Pessoas, Model.Dao.Interf, Model.Dao.OrmBr;
 
 Type
-  TServerControllerDaoServicoGrupo = class(TInterfacedObject,
+  TServerControllerDaoPessoas = class(TInterfacedObject,
     iServerControllerMetodos)
   private
-    Dao : iModelEntidadeDao<TServicoGrupo>;
+    Dao : iModelEntidadeDao<TPessoas>;
     FCon: iConexaoModel;
   public
     constructor Create(const ACon: iConexaoModel);
@@ -27,44 +27,41 @@ Type
 implementation
 
 uses
+  System.SysUtils;
 
-  System.Generics.Collections, ormbr.rest.JSON,
-  System.SysUtils, Server.Sc, ormbr.container.objectset,
-  ormbr.jsonutils.datasnap  ;
+{ TServerControllerDaoPessoas }
 
-{ TServerControllerDaoServicoGrupo }
-
-constructor TServerControllerDaoServicoGrupo.Create(const ACon: iConexaoModel);
+constructor TServerControllerDaoPessoas.Create(const ACon: iConexaoModel);
 begin
   FCon := ACon;
-  Dao := TModelDaoOrmBr<TServicoGrupo>.New(fcon);
+  Dao := TModelDaoOrmBr<TPessoas>.New(fcon);
 end;
 
-destructor TServerControllerDaoServicoGrupo.Destroy;
+destructor TServerControllerDaoPessoas.Destroy;
 begin
 
   inherited;
 end;
 
-function TServerControllerDaoServicoGrupo.Get(id: integer; var ResultJson: string)
+function TServerControllerDaoPessoas.Get(id: integer; var ResultJson: string)
   : iServerControllerMetodos;
 begin
-  dao.Get('ServicoGrupo_id=' + inttostr(id), ResultJson);
+  dao.Get('Pessoas_id=' + inttostr(id), ResultJson);
 end;
 
-function TServerControllerDaoServicoGrupo.Lista(aFiltro: string;
+function TServerControllerDaoPessoas.Lista(aFiltro: string;
   var ResultJson: string): iServerControllerMetodos;
 begin
   Dao.Lista(aFiltro, ResultJson);
 end;
 
-class function TServerControllerDaoServicoGrupo.New(const ACon: iConexaoModel)
+class function TServerControllerDaoPessoas.New(const ACon: iConexaoModel)
   : iServerControllerMetodos;
 begin
   Result := self.Create(ACon);
 end;
 
-function TServerControllerDaoServicoGrupo.Post(const JSON: string)
+function TServerControllerDaoPessoas.Post(const JSON: string)
   : iServerControllerMetodos;
 begin
   Dao.Post(JSON) ;

@@ -13,7 +13,9 @@ type
     { Private declarations }
   public
     { Public declarations }
-    function PessoaGet: string;
+    function PessoasGet(id: integer): string;
+    function PessoasLista(aFiltro: string) : String;
+    function PessoasPut(const  AJson: String): string;
 
     function ServicoGet(id: integer) : String;
     function ServicoLista(aFiltro: string) : String;
@@ -33,45 +35,49 @@ implementation
 
 uses System.StrUtils, Server.Controller, Server.Controller.Conexao.Strategy;
 
-function TSMCadastros.PessoaGet: string;
+function TSMCadastros.PessoasGet(id: integer): string;
 begin
-//  Result := TJson.ObjectToJsonString(TObject(Pessoa.Get('').ToEntidade));
+  Pessoas.Dao.Get(ID, Result);
+end;
+
+function TSMCadastros.PessoasLista(aFiltro: string): String;
+begin
+  Pessoas.Dao.Lista(aFiltro, Result);
+end;
+
+function TSMCadastros.PessoasPut(const AJson: String): string;
+begin
+  Pessoas.Dao.Post(AJson);
 end;
 
 function TSMCadastros.ServicoGet(id: integer) : String;
 begin
-  TServerController.New(db.Conection).Dao.Servico.Get(ID, Result);
+  Servicos.Dao.Get(ID, Result);
 end;
 
 function TSMCadastros.ServicoGrupoGet(id: integer): String;
 begin
-  TServerController.New(db.Conection).Dao.ServicoGrupo.Get(ID, Result);
+  ServicosGrupo.Dao.Get(ID, Result);
 end;
 
 function TSMCadastros.ServicoGrupoLista(aFiltro: string): String;
-var
-  s: string;
 begin
-  TServerController.New(db.Conection).Dao.ServicoGrupo.Lista(aFiltro, s);
-  Result := s;
+  ServicosGrupo.Dao.Lista(aFiltro, Result);
 end;
 
 function TSMCadastros.ServicoGrupoPut(const AJson: String): string;
 begin
-  TServerController.New(db.Conection).Dao.ServicoGrupo.Post(AJson);
+  ServicosGrupo.Dao.Post(AJson);
 end;
 
 function TSMCadastros.ServicoLista(aFiltro: string): String;
-var
-  s: string;
 begin
-  TServerController.New(db.Conection).Dao.Servico.Lista(aFiltro, s);
-  Result := s;
+  Servicos.Dao.Lista(aFiltro, Result);
 end;
 
 function TSMCadastros.ServicoPut(const  AJson: String): string;
 begin
-  TServerController.New(db.Conection).Dao.Servico.Post(AJson);
+  Servicos.Dao.Post(AJson);
 end;
 
 end.
