@@ -29,8 +29,8 @@ function TControllerStrategyHelper.Show: TForm;
 begin
   case self of
     Pessoas:
-      ;
-    Servicos:
+      Result := TControllerFactory.New.Pessoas.Show;
+   Servicos:
       Result := TControllerFactory.New.Servico.Show;
 
     Servicosgrupo:

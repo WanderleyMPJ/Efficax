@@ -79,7 +79,7 @@ var
 begin
   LMaster := AValue as TServico;
   JSon := TORMBrJson.ObjectToJsonString(LMaster);
-  FRestCli.ServicoPut(Json);
+  FRestCli.ServicoPut(LMaster.Servico_id, Json);
   Result := self;
 end;
 

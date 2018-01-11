@@ -55,8 +55,8 @@ end;
 
 function TConexaoStrategyHelper.GetConection: iConexaoModel;
 begin
-  if Assigned(Fconection) then
-    criarBanco;
+  if not Assigned(Fconection) then
+    conectar;
   Result := fconection;
 end;
 

@@ -1,6 +1,6 @@
 //
 // Created by the DataSnap proxy generator.
-// 08/01/2018 17:27:47
+// 11/01/2018 15:35:35
 //
 
 unit Cliente.Rest;
@@ -12,7 +12,9 @@ uses System.JSON, Datasnap.DSProxyRest, Datasnap.DSClientRest, Data.DBXCommon, D
 type
   TSMCadastrosClient = class(TDSAdminRestClient)
   private
-    FPessoaGetCommand: TDSRestCommand;
+    FPessoasGetCommand: TDSRestCommand;
+    FPessoasListaCommand: TDSRestCommand;
+    FPessoasPutCommand: TDSRestCommand;
     FServicoGetCommand: TDSRestCommand;
     FServicoListaCommand: TDSRestCommand;
     FServicoPutCommand: TDSRestCommand;
@@ -23,18 +25,34 @@ type
     constructor Create(ARestConnection: TDSRestConnection); overload;
     constructor Create(ARestConnection: TDSRestConnection; AInstanceOwner: Boolean); overload;
     destructor Destroy; override;
-    function PessoaGet(const ARequestFilter: string = ''): string;
+    function PessoasGet(id: Integer; const ARequestFilter: string = ''): string;
+    function PessoasLista(aFiltro: string; const ARequestFilter: string = ''): string;
+    function PessoasPut(oldId: Integer; AJson: string; const ARequestFilter: string = ''): string;
     function ServicoGet(id: Integer; const ARequestFilter: string = ''): string;
     function ServicoLista(aFiltro: string; const ARequestFilter: string = ''): string;
-    function ServicoPut(AJson: string; const ARequestFilter: string = ''): string;
+    function ServicoPut(oldId: Integer; AJson: string; const ARequestFilter: string = ''): string;
     function ServicoGrupoGet(id: Integer; const ARequestFilter: string = ''): string;
     function ServicoGrupoLista(aFiltro: string; const ARequestFilter: string = ''): string;
-    function ServicoGrupoPut(AJson: string; const ARequestFilter: string = ''): string;
+    function ServicoGrupoPut(oldId: Integer; AJson: string; const ARequestFilter: string = ''): string;
   end;
 
 const
-  TSMCadastros_PessoaGet: array [0..0] of TDSRestParameterMetaData =
+  TSMCadastros_PessoasGet: array [0..1] of TDSRestParameterMetaData =
   (
+    (Name: 'id'; Direction: 1; DBXType: 6; TypeName: 'Integer'),
+    (Name: ''; Direction: 4; DBXType: 26; TypeName: 'string')
+  );
+
+  TSMCadastros_PessoasLista: array [0..1] of TDSRestParameterMetaData =
+  (
+    (Name: 'aFiltro'; Direction: 1; DBXType: 26; TypeName: 'string'),
+    (Name: ''; Direction: 4; DBXType: 26; TypeName: 'string')
+  );
+
+  TSMCadastros_PessoasPut: array [0..2] of TDSRestParameterMetaData =
+  (
+    (Name: 'oldId'; Direction: 1; DBXType: 6; TypeName: 'Integer'),
+    (Name: 'AJson'; Direction: 1; DBXType: 26; TypeName: 'string'),
     (Name: ''; Direction: 4; DBXType: 26; TypeName: 'string')
   );
 
@@ -50,8 +68,9 @@ const
     (Name: ''; Direction: 4; DBXType: 26; TypeName: 'string')
   );
 
-  TSMCadastros_ServicoPut: array [0..1] of TDSRestParameterMetaData =
+  TSMCadastros_ServicoPut: array [0..2] of TDSRestParameterMetaData =
   (
+    (Name: 'oldId'; Direction: 1; DBXType: 6; TypeName: 'Integer'),
     (Name: 'AJson'; Direction: 1; DBXType: 26; TypeName: 'string'),
     (Name: ''; Direction: 4; DBXType: 26; TypeName: 'string')
   );
@@ -68,25 +87,56 @@ const
     (Name: ''; Direction: 4; DBXType: 26; TypeName: 'string')
   );
 
-  TSMCadastros_ServicoGrupoPut: array [0..1] of TDSRestParameterMetaData =
+  TSMCadastros_ServicoGrupoPut: array [0..2] of TDSRestParameterMetaData =
   (
+    (Name: 'oldId'; Direction: 1; DBXType: 6; TypeName: 'Integer'),
     (Name: 'AJson'; Direction: 1; DBXType: 26; TypeName: 'string'),
     (Name: ''; Direction: 4; DBXType: 26; TypeName: 'string')
   );
 
 implementation
 
-function TSMCadastrosClient.PessoaGet(const ARequestFilter: string): string;
+function TSMCadastrosClient.PessoasGet(id: Integer; const ARequestFilter: string): string;
 begin
-  if FPessoaGetCommand = nil then
+  if FPessoasGetCommand = nil then
   begin
-    FPessoaGetCommand := FConnection.CreateCommand;
-    FPessoaGetCommand.RequestType := 'GET';
-    FPessoaGetCommand.Text := 'TSMCadastros.PessoaGet';
-    FPessoaGetCommand.Prepare(TSMCadastros_PessoaGet);
+    FPessoasGetCommand := FConnection.CreateCommand;
+    FPessoasGetCommand.RequestType := 'GET';
+    FPessoasGetCommand.Text := 'TSMCadastros.PessoasGet';
+    FPessoasGetCommand.Prepare(TSMCadastros_PessoasGet);
   end;
-  FPessoaGetCommand.Execute(ARequestFilter);
-  Result := FPessoaGetCommand.Parameters[0].Value.GetWideString;
+  FPessoasGetCommand.Parameters[0].Value.SetInt32(id);
+  FPessoasGetCommand.Execute(ARequestFilter);
+  Result := FPessoasGetCommand.Parameters[1].Value.GetWideString;
+end;
+
+function TSMCadastrosClient.PessoasLista(aFiltro: string; const ARequestFilter: string): string;
+begin
+  if FPessoasListaCommand = nil then
+  begin
+    FPessoasListaCommand := FConnection.CreateCommand;
+    FPessoasListaCommand.RequestType := 'GET';
+    FPessoasListaCommand.Text := 'TSMCadastros.PessoasLista';
+    FPessoasListaCommand.Prepare(TSMCadastros_PessoasLista);
+  end;
+  FPessoasListaCommand.Parameters[0].Value.SetWideString(aFiltro);
+  FPessoasListaCommand.Execute(ARequestFilter);
+  Result := FPessoasListaCommand.Parameters[1].Value.GetWideString;
+end;
+
+function TSMCadastrosClient.PessoasPut(oldId: Integer; AJson: string; const ARequestFilter: string): string;
+begin
+  if FPessoasPutCommand = nil then
+  begin
+    FPessoasPutCommand := FConnection.CreateCommand;
+    FPessoasPutCommand.RequestType := 'GET';
+    FPessoasPutCommand.Text := 'TSMCadastros.PessoasPut';
+    FPessoasPutCommand.Prepare(TSMCadastros_PessoasPut);
+  end;
+  FPessoasPutCommand.Parameters[0].Value.SetInt32(oldId);
+  FPessoasPutCommand.Parameters[1].Value.SetWideString(AJson);
+  FPessoasPutCommand.Execute(ARequestFilter);
+  Result := FPessoasPutCommand.Parameters[2].Value.GetWideString;
 end;
 
 function TSMCadastrosClient.ServicoGet(id: Integer; const ARequestFilter: string): string;
@@ -117,7 +167,7 @@ begin
   Result := FServicoListaCommand.Parameters[1].Value.GetWideString;
 end;
 
-function TSMCadastrosClient.ServicoPut(AJson: string; const ARequestFilter: string): string;
+function TSMCadastrosClient.ServicoPut(oldId: Integer; AJson: string; const ARequestFilter: string): string;
 begin
   if FServicoPutCommand = nil then
   begin
@@ -126,9 +176,10 @@ begin
     FServicoPutCommand.Text := 'TSMCadastros.ServicoPut';
     FServicoPutCommand.Prepare(TSMCadastros_ServicoPut);
   end;
-  FServicoPutCommand.Parameters[0].Value.SetWideString(AJson);
+  FServicoPutCommand.Parameters[0].Value.SetInt32(oldId);
+  FServicoPutCommand.Parameters[1].Value.SetWideString(AJson);
   FServicoPutCommand.Execute(ARequestFilter);
-  Result := FServicoPutCommand.Parameters[1].Value.GetWideString;
+  Result := FServicoPutCommand.Parameters[2].Value.GetWideString;
 end;
 
 function TSMCadastrosClient.ServicoGrupoGet(id: Integer; const ARequestFilter: string): string;
@@ -159,7 +210,7 @@ begin
   Result := FServicoGrupoListaCommand.Parameters[1].Value.GetWideString;
 end;
 
-function TSMCadastrosClient.ServicoGrupoPut(AJson: string; const ARequestFilter: string): string;
+function TSMCadastrosClient.ServicoGrupoPut(oldId: Integer; AJson: string; const ARequestFilter: string): string;
 begin
   if FServicoGrupoPutCommand = nil then
   begin
@@ -168,9 +219,10 @@ begin
     FServicoGrupoPutCommand.Text := 'TSMCadastros.ServicoGrupoPut';
     FServicoGrupoPutCommand.Prepare(TSMCadastros_ServicoGrupoPut);
   end;
-  FServicoGrupoPutCommand.Parameters[0].Value.SetWideString(AJson);
+  FServicoGrupoPutCommand.Parameters[0].Value.SetInt32(oldId);
+  FServicoGrupoPutCommand.Parameters[1].Value.SetWideString(AJson);
   FServicoGrupoPutCommand.Execute(ARequestFilter);
-  Result := FServicoGrupoPutCommand.Parameters[1].Value.GetWideString;
+  Result := FServicoGrupoPutCommand.Parameters[2].Value.GetWideString;
 end;
 
 constructor TSMCadastrosClient.Create(ARestConnection: TDSRestConnection);
@@ -185,7 +237,9 @@ end;
 
 destructor TSMCadastrosClient.Destroy;
 begin
-  FPessoaGetCommand.DisposeOf;
+  FPessoasGetCommand.DisposeOf;
+  FPessoasListaCommand.DisposeOf;
+  FPessoasPutCommand.DisposeOf;
   FServicoGetCommand.DisposeOf;
   FServicoListaCommand.DisposeOf;
   FServicoPutCommand.DisposeOf;

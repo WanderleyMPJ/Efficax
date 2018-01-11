@@ -52619,6 +52619,7 @@ object frmMain: TfrmMain
         Size.PlatformDefault = False
         TabOrder = 0
         Text = 'Pessoas'
+        OnClick = lbxPessoasClick
       end
       object ListBoxItem3: TListBoxItem
         ItemData.Accessory = aMore
@@ -52721,6 +52722,10 @@ object frmMain: TfrmMain
     object actServicosGrupo: TAction
       Text = 'actServicosGrupo'
       OnExecute = actServicosGrupoExecute
+    end
+    object actPessoas: TAction
+      Text = 'actPessoas'
+      OnExecute = actPessoasExecute
     end
   end
 end

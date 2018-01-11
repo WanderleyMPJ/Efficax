@@ -142,7 +142,7 @@ var
 begin
   try
     LJson := TORMBrJson.ObjectToJsonString(TServico(SetValue));
-    FRestCli.ServicoPut(LJson);
+    FRestCli.ServicoPut(TServico(setvalue).Servico_id,  LJson);
     ShowMessage('Dados Gravados Com Sucesso...');
     Result    := self;
   except

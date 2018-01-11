@@ -1,16 +1,17 @@
-unit Cliente.Controller.Servicos.Grupo;
+unit Cliente.Controller.Pessoas;
 
 interface
 
 uses
   Client.Controller.Interf, Data.DB, Cliente.Rest, Datasnap.DSClientRest,
-  FMX.Forms, System.Classes, View.Base, FMX.Grid, Entidade.Servico.Grupo,
-  Entidade.Interf;
+  FMX.Forms, System.Classes, View.Base, FMX.Grid,
+  Entidade.Interf, Entidade.Pessoas;
+
 
 Type
-  TControllerServicosGrupo = class(TInterfacedObject, iMetodos)
+  TControllerPessoas = class(TInterfacedObject, iMetodos)
   private
-    FEntidade : TServicoGrupo;
+    FEntidade : TPessoas;
 
     FRestCli: TSMCadastrosClient;
     function getRestCon: TDSRestConnection;
@@ -37,34 +38,34 @@ implementation
 uses
   Model.Util, Cliente.Conection.Model,
   Client.frm.Servicos, System.JSON, System.SysUtils, FMX.Dialogs,
-  ormbr.rest.json, Client.frm.ServicosGrupo;
+  ormbr.rest.json, Client.frm.ServicosGrupo, Cliente.Frm.Pessoas;
 
-{ TControllerServicosGrupo }
+{ TControllerPessoas }
 
-constructor TControllerServicosGrupo.Create;
+constructor TControllerPessoas.Create;
 begin
   if not Assigned(FRestCli) then
     FRestCli := TSMCadastrosClient.Create(RestCon);
 end;
 
-destructor TControllerServicosGrupo.Destroy;
+destructor TControllerPessoas.Destroy;
 begin
   inherited;
 end;
 
 
-procedure TControllerServicosGrupo.FormatarGrid(aGrid: TStringGrid);
+procedure TControllerPessoas.FormatarGrid(aGrid: TStringGrid);
 begin
   aGrid.Columns[0].Width := 60;
   aGrid.Columns[1].Width := 250;
 end;
 
-function TControllerServicosGrupo.getRestCon: TDSRestConnection;
+function TControllerPessoas.getRestCon: TDSRestConnection;
 begin
   Result := TConectionModel.New.RestCon;
 end;
 
-procedure TControllerServicosGrupo.HandleRESTException(const APrefix: string;
+procedure TControllerPessoas.HandleRESTException(const APrefix: string;
   const E: TDSRestProtocolException);
 var
   LJSONValue: TJSONValue;
@@ -90,15 +91,14 @@ begin
   ShowMessageFmt('%s: %s', [APrefix, LMessage]);
 end;
 
-function TControllerServicosGrupo.Listar(aDataset: TDataSet; Filtro: string; aGrid: TStringGrid)
+function TControllerPessoas.Listar(aDataset: TDataSet; Filtro: string; aGrid: TStringGrid)
   : iMetodos;
 var
   LJson: string;
 begin
   try
-    LJson := FRestCli.ServicoGrupoLista(Filtro);
+    LJson := FRestCli.PessoasLista(Filtro);
     TUtil.JsonToDataset(aDataset, LJson);
-    // FLista := TORMBrJson.JsonToObjectList<TServicoGrupo>(LJson);
     Result := self;
     if aDataset.RecordCount > 0 then
       FormatarGrid(aGrid);
@@ -110,24 +110,24 @@ begin
   end;
 end;
 
-class function TControllerServicosGrupo.New: iMetodos;
+class function TControllerPessoas.New: iMetodos;
 begin
   Result := self.Create;
 end;
 
-function TControllerServicosGrupo.Novo: iMetodos;
+function TControllerPessoas.Novo: iMetodos;
 begin
   Result := self;
 end;
 
-function TControllerServicosGrupo.Open(id: integer; var getValue: iEntidade): iMetodos;
+function TControllerPessoas.Open(id: integer; var getValue: iEntidade): iMetodos;
 var
   LJson: string;
 begin
   try
-    LJson     := FRestCli.ServicoGrupoGet(id);
-    FEntidade := TORMBrJson.JsonToObject<TServicoGrupo>(LJson);
-    getValue := fEntidade as TServicoGrupo;
+    LJson     := FRestCli.PessoasGet(id);
+    FEntidade := TORMBrJson.JsonToObject<TPessoas>(LJson);
+    getValue := fEntidade as TPessoas;
     Result    := self;
   except
     on E: TDSRestProtocolException do
@@ -137,13 +137,13 @@ begin
   end;
 end;
 
-function TControllerServicosGrupo.Post(const SetValue: iEntidade): iMetodos;
+function TControllerPessoas.Post(const SetValue: iEntidade): iMetodos;
 var
   LJson: string;
 begin
   try
-    LJson := TORMBrJson.ObjectToJsonString(TServicoGrupo(SetValue));
-    FRestCli.ServicoGrupoPut(TServicoGrupo(setValue).ServicoGrupo_id, LJson);
+    LJson := TORMBrJson.ObjectToJsonString(TPessoas(SetValue));
+    FRestCli.PessoasPut(TPessoas(setvalue).Pessoas_ID, LJson);
     ShowMessage('Dados Gravados Com Sucesso...');
     Result    := self;
   except
@@ -154,9 +154,9 @@ begin
   end;
 end;
 
-function TControllerServicosGrupo.Show: TForm;
+function TControllerPessoas.Show: TForm;
 begin
-  Result := TFrmservicosGrupo.Create(nil, self);
+  Result := TFrmPessoas.Create(nil, self);
 end;
 
 end.

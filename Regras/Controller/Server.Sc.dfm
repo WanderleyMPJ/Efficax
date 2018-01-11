@@ -17,6 +17,7 @@ object Sc: TSc
   end
   object DSServerClass1: TDSServerClass
     OnGetClass = DSServerClass1GetClass
+    Server = DSServer1
     Left = 192
     Top = 120
   end

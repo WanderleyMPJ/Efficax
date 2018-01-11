@@ -35,6 +35,7 @@ type
     actServicos: TAction;
     lbxServicosGrupo: TListBoxItem;
     actServicosGrupo: TAction;
+    actPessoas: TAction;
     procedure spbExitClick(Sender: TObject);
     procedure ListBoxItem2Click(Sender: TObject);
     procedure ListBoxItem4Click(Sender: TObject);
@@ -42,6 +43,8 @@ type
     procedure lbxServicosClick(Sender: TObject);
     procedure actServicosGrupoExecute(Sender: TObject);
     procedure lbxServicosGrupoClick(Sender: TObject);
+    procedure actPessoasExecute(Sender: TObject);
+    procedure lbxPessoasClick(Sender: TObject);
   private
     { Private declarations }
     FActiveForm: TForm;
@@ -120,6 +123,11 @@ begin
   frmMain.MultiView1.HideMaster;
 end;
 
+procedure TfrmMain.actPessoasExecute(Sender: TObject);
+begin
+  AbreForm2(Pessoas.Show);
+end;
+
 procedure TfrmMain.actServicosExecute(Sender: TObject);
 begin
   AbreForm2(Servicos.Show);
@@ -128,6 +136,11 @@ end;
 procedure TfrmMain.actServicosGrupoExecute(Sender: TObject);
 begin
   AbreForm2(ServicosGrupo.Show);
+end;
+
+procedure TfrmMain.lbxPessoasClick(Sender: TObject);
+begin
+  actPessoasExecute(self);
 end;
 
 procedure TfrmMain.lbxServicosClick(Sender: TObject);

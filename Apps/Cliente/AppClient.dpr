@@ -21,19 +21,23 @@ uses
   Client.Controller.Strategy in '..\..\Regras\Controller\Client\Client.Controller.Strategy.pas',
   view.frm.Main in '..\..\Regras\View\Client\view.frm.Main.pas' {frmMain},
   Client.Controller.Servicos in '..\..\Regras\Controller\Client\Cadastros\Client.Controller.Servicos.pas',
-  view.frm.CadPadrao in '..\..\Regras\View\Client\view.frm.CadPadrao.pas' {frmCadPadrao},
   Client.Controller.Factory.Show in '..\..\Regras\Controller\Client\Client.Controller.Factory.Show.pas',
   View.Base in '..\..\Regras\View\Client\Cadastros\View.Base.pas',
   Client.Frm.Pai in '..\..\Regras\View\Client\Client.Frm.Pai.pas' {frmPai},
   Client.frm.Servicos in '..\..\Regras\View\Client\Cadastros\Client.frm.Servicos.pas' {frmServicos},
   Entidade.Servico.Grupo in '..\..\Regras\Model\Entidades\Cadastros\Entidade.Servico.Grupo.pas',
   Cliente.Controller.Servicos.Grupo in '..\..\Regras\Controller\Cliente\Cadastro\Cliente.Controller.Servicos.Grupo.pas',
-  Client.frm.ServicosGrupo in '..\..\Regras\View\Client\Cadastros\Client.frm.ServicosGrupo.pas' {frmServicosGrupo};
+  Client.frm.ServicosGrupo in '..\..\Regras\View\Client\Cadastros\Client.frm.ServicosGrupo.pas' {frmServicosGrupo},
+  Entidade.Pessoas in '..\..\Regras\Model\Entidades\Cadastros\Entidade.Pessoas.pas',
+  Entidade.Pessoas.Telefones in '..\..\Regras\Model\Entidades\Cadastros\Entidade.Pessoas.Telefones.pas',
+  Cliente.Controller.Pessoas in '..\..\Regras\Controller\Cliente\Cadastro\Cliente.Controller.Pessoas.pas',
+  Cliente.Frm.Pessoas in '..\..\Regras\View\Client\Cadastros\Cliente.Frm.Pessoas.pas' {frmPessoas};
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.CreateForm(TfrmMain, frmMain);
+  Application.CreateForm(TfrmPessoas, frmPessoas);
   Application.Run;
 end.

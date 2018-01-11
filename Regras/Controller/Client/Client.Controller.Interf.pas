@@ -29,6 +29,7 @@ type
   iController = interface
     ['{9602B73D-A490-4643-8AE9-0AF22B0B868F}']
 
+    function Pessoas : iMetodos;
     function Servico : iMetodos;
     function ServicosGrupo : iMetodos;
 

@@ -14,14 +14,16 @@ Type
     destructor Destroy; override;
     class function New: iController;
 
-    function Servico : iMetodos;
-    function ServicosGrupo: iMetodos;
+    function Pessoas        : iMetodos;
+    function Servico        : iMetodos;
+    function ServicosGrupo  : iMetodos;
   end;
 implementation
 
 { TControllerFactory }
 
-uses Client.Controller.Servicos, Cliente.Controller.Servicos.Grupo;
+uses Client.Controller.Servicos, Cliente.Controller.Servicos.Grupo,
+  Cliente.Controller.Pessoas;
 
 
 constructor TControllerFactory.Create;
@@ -37,6 +39,11 @@ end;
 class function TControllerFactory.New: iController;
 begin
   Result := self.Create;
+end;
+
+function TControllerFactory.Pessoas: iMetodos;
+begin
+  Result := TControllerPessoas.New;
 end;
 
 function TControllerFactory.Servico: iMetodos;

@@ -337,10 +337,6 @@
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="..\..\Regras\Controller\Client\Cadastros\Client.Controller.Servicos.pas"/>
-        <DCCReference Include="..\..\Regras\View\Client\view.frm.CadPadrao.pas">
-            <Form>frmCadPadrao</Form>
-            <FormType>fmx</FormType>
-        </DCCReference>
         <DCCReference Include="..\..\Regras\Controller\Client\Client.Controller.Factory.Show.pas"/>
         <DCCReference Include="..\..\Regras\View\Client\Cadastros\View.Base.pas"/>
         <DCCReference Include="..\..\Regras\View\Client\Client.Frm.Pai.pas">
@@ -355,6 +351,13 @@
         <DCCReference Include="..\..\Regras\Controller\Cliente\Cadastro\Cliente.Controller.Servicos.Grupo.pas"/>
         <DCCReference Include="..\..\Regras\View\Client\Cadastros\Client.frm.ServicosGrupo.pas">
             <Form>frmServicosGrupo</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
+        <DCCReference Include="..\..\Regras\Model\Entidades\Cadastros\Entidade.Pessoas.pas"/>
+        <DCCReference Include="..\..\Regras\Model\Entidades\Cadastros\Entidade.Pessoas.Telefones.pas"/>
+        <DCCReference Include="..\..\Regras\Controller\Cliente\Cadastro\Cliente.Controller.Pessoas.pas"/>
+        <DCCReference Include="..\..\Regras\View\Client\Cadastros\Cliente.Frm.Pessoas.pas">
+            <Form>frmPessoas</Form>
             <FormType>fmx</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">

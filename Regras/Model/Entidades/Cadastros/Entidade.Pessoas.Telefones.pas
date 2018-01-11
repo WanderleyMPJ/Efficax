@@ -2,26 +2,28 @@ unit Entidade.Pessoas.Telefones;
 
 interface
 
-uses
-  entidade.Interf,
-  Generics.Collections, db,
+Uses
+
+  Classes,
+  DB,
+  SysUtils,
+  Generics.Collections,
   /// orm
   ormbr.mapping.attributes,
-  ormbr.types.mapping,
-  ormbr.types.lazy,
   ormbr.types.nullable,
+  ormbr.types.mapping,
   ormbr.mapping.register,
-    System.Classes;
+  ormbr.types.blob, Entidade.Interf;
 
 Type
+
   [Entity]
   [Table('Pessoas_Telefone', 'Tabela de Telefones')]
-  [PrimaryKey('Telefone_Id', AutoInc, NoSort, False, 'Chave primária')]
-  [Indexe('IDX_Numero','Numero', NoSort, True, 'Indexe por Telefone')]
+  [PrimaryKey('Telefone_Id', AutoInc, NoSort, True, 'Chave primária')]
   [Sequence('Telefone_SEQ')]
-
+  [Indexe('IDX_Numero','Numero')]
   TTelefone = class(TInterfacedObject, iEntidade)
-  private
+  private
     FTelefone_ID: integer;
     FDDD: integer;
     FNumero: string;
@@ -34,6 +36,7 @@ Type
   public
     constructor Create;
     destructor Destroy; override;
+
 
     [Restrictions([NoUpdate, NotNull])]
     [Column('Telefone_id', ftInteger)]

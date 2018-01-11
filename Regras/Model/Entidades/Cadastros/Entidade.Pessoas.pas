@@ -19,12 +19,11 @@ uses
   , Entidade.Pessoas.Telefones;
 
 Type
-
   [Entity]
   [Table('Pessoas', '')]
   [PrimaryKey('Pessoas_Id', AutoInc, NoSort, True, 'Chave primária')]
-  [Indexe('idx_Pessoas_Nome','Nome')]
   [Sequence('seq_PESSOAS')]
+  [Indexe('idx_Pessoas_Nome','Nome')]
   TPessoas = class(TInterfacedObject, iEntidade)
   private
     FPessoas_ID: integer;
