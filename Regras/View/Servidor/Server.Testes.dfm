@@ -30,6 +30,15 @@ object frmTestes: TfrmTestes
       'Memo1')
     TabOrder = 1
   end
+  object Button2: TButton
+    Left = 8
+    Top = 216
+    Width = 137
+    Height = 25
+    Caption = 'Propriedade via rtti'
+    TabOrder = 2
+    OnClick = Button2Click
+  end
   object FDConnection1: TFDConnection
     Params.Strings = (
       'Database=efficax'

@@ -1,6 +1,6 @@
 //
 // Created by the DataSnap proxy generator.
-// 11/01/2018 15:35:35
+// 14/01/2018 09:50:10
 //
 
 unit Cliente.Rest;
@@ -27,13 +27,13 @@ type
     destructor Destroy; override;
     function PessoasGet(id: Integer; const ARequestFilter: string = ''): string;
     function PessoasLista(aFiltro: string; const ARequestFilter: string = ''): string;
-    function PessoasPut(oldId: Integer; AJson: string; const ARequestFilter: string = ''): string;
+    function PessoasPut(oldId: Integer; AJson: TJSONArray; const ARequestFilter: string = ''): string;
     function ServicoGet(id: Integer; const ARequestFilter: string = ''): string;
     function ServicoLista(aFiltro: string; const ARequestFilter: string = ''): string;
-    function ServicoPut(oldId: Integer; AJson: string; const ARequestFilter: string = ''): string;
+    function ServicoPut(oldId: Integer; AJson: TJSONArray; const ARequestFilter: string = ''): string;
     function ServicoGrupoGet(id: Integer; const ARequestFilter: string = ''): string;
     function ServicoGrupoLista(aFiltro: string; const ARequestFilter: string = ''): string;
-    function ServicoGrupoPut(oldId: Integer; AJson: string; const ARequestFilter: string = ''): string;
+    function ServicoGrupoPut(oldId: Integer; AJson: TJSONArray; const ARequestFilter: string = ''): string;
   end;
 
 const
@@ -52,7 +52,7 @@ const
   TSMCadastros_PessoasPut: array [0..2] of TDSRestParameterMetaData =
   (
     (Name: 'oldId'; Direction: 1; DBXType: 6; TypeName: 'Integer'),
-    (Name: 'AJson'; Direction: 1; DBXType: 26; TypeName: 'string'),
+    (Name: 'AJson'; Direction: 1; DBXType: 37; TypeName: 'TJSONArray'),
     (Name: ''; Direction: 4; DBXType: 26; TypeName: 'string')
   );
 
@@ -71,7 +71,7 @@ const
   TSMCadastros_ServicoPut: array [0..2] of TDSRestParameterMetaData =
   (
     (Name: 'oldId'; Direction: 1; DBXType: 6; TypeName: 'Integer'),
-    (Name: 'AJson'; Direction: 1; DBXType: 26; TypeName: 'string'),
+    (Name: 'AJson'; Direction: 1; DBXType: 37; TypeName: 'TJSONArray'),
     (Name: ''; Direction: 4; DBXType: 26; TypeName: 'string')
   );
 
@@ -90,7 +90,7 @@ const
   TSMCadastros_ServicoGrupoPut: array [0..2] of TDSRestParameterMetaData =
   (
     (Name: 'oldId'; Direction: 1; DBXType: 6; TypeName: 'Integer'),
-    (Name: 'AJson'; Direction: 1; DBXType: 26; TypeName: 'string'),
+    (Name: 'AJson'; Direction: 1; DBXType: 37; TypeName: 'TJSONArray'),
     (Name: ''; Direction: 4; DBXType: 26; TypeName: 'string')
   );
 
@@ -124,17 +124,17 @@ begin
   Result := FPessoasListaCommand.Parameters[1].Value.GetWideString;
 end;
 
-function TSMCadastrosClient.PessoasPut(oldId: Integer; AJson: string; const ARequestFilter: string): string;
+function TSMCadastrosClient.PessoasPut(oldId: Integer; AJson: TJSONArray; const ARequestFilter: string): string;
 begin
   if FPessoasPutCommand = nil then
   begin
     FPessoasPutCommand := FConnection.CreateCommand;
-    FPessoasPutCommand.RequestType := 'GET';
-    FPessoasPutCommand.Text := 'TSMCadastros.PessoasPut';
+    FPessoasPutCommand.RequestType := 'POST';
+    FPessoasPutCommand.Text := 'TSMCadastros."PessoasPut"';
     FPessoasPutCommand.Prepare(TSMCadastros_PessoasPut);
   end;
   FPessoasPutCommand.Parameters[0].Value.SetInt32(oldId);
-  FPessoasPutCommand.Parameters[1].Value.SetWideString(AJson);
+  FPessoasPutCommand.Parameters[1].Value.SetJSONValue(AJson, FInstanceOwner);
   FPessoasPutCommand.Execute(ARequestFilter);
   Result := FPessoasPutCommand.Parameters[2].Value.GetWideString;
 end;
@@ -167,17 +167,17 @@ begin
   Result := FServicoListaCommand.Parameters[1].Value.GetWideString;
 end;
 
-function TSMCadastrosClient.ServicoPut(oldId: Integer; AJson: string; const ARequestFilter: string): string;
+function TSMCadastrosClient.ServicoPut(oldId: Integer; AJson: TJSONArray; const ARequestFilter: string): string;
 begin
   if FServicoPutCommand = nil then
   begin
     FServicoPutCommand := FConnection.CreateCommand;
-    FServicoPutCommand.RequestType := 'GET';
-    FServicoPutCommand.Text := 'TSMCadastros.ServicoPut';
+    FServicoPutCommand.RequestType := 'POST';
+    FServicoPutCommand.Text := 'TSMCadastros."ServicoPut"';
     FServicoPutCommand.Prepare(TSMCadastros_ServicoPut);
   end;
   FServicoPutCommand.Parameters[0].Value.SetInt32(oldId);
-  FServicoPutCommand.Parameters[1].Value.SetWideString(AJson);
+  FServicoPutCommand.Parameters[1].Value.SetJSONValue(AJson, FInstanceOwner);
   FServicoPutCommand.Execute(ARequestFilter);
   Result := FServicoPutCommand.Parameters[2].Value.GetWideString;
 end;
@@ -210,17 +210,17 @@ begin
   Result := FServicoGrupoListaCommand.Parameters[1].Value.GetWideString;
 end;
 
-function TSMCadastrosClient.ServicoGrupoPut(oldId: Integer; AJson: string; const ARequestFilter: string): string;
+function TSMCadastrosClient.ServicoGrupoPut(oldId: Integer; AJson: TJSONArray; const ARequestFilter: string): string;
 begin
   if FServicoGrupoPutCommand = nil then
   begin
     FServicoGrupoPutCommand := FConnection.CreateCommand;
-    FServicoGrupoPutCommand.RequestType := 'GET';
-    FServicoGrupoPutCommand.Text := 'TSMCadastros.ServicoGrupoPut';
+    FServicoGrupoPutCommand.RequestType := 'POST';
+    FServicoGrupoPutCommand.Text := 'TSMCadastros."ServicoGrupoPut"';
     FServicoGrupoPutCommand.Prepare(TSMCadastros_ServicoGrupoPut);
   end;
   FServicoGrupoPutCommand.Parameters[0].Value.SetInt32(oldId);
-  FServicoGrupoPutCommand.Parameters[1].Value.SetWideString(AJson);
+  FServicoGrupoPutCommand.Parameters[1].Value.SetJSONValue(AJson, FInstanceOwner);
   FServicoGrupoPutCommand.Execute(ARequestFilter);
   Result := FServicoGrupoPutCommand.Parameters[2].Value.GetWideString;
 end;

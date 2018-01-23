@@ -35,7 +35,7 @@ var
 implementation
 
 uses
-  Entidade.Pessoas;
+  Entidade.Pessoas, Entidade.Pessoas.Telefones;
 
 {$R *.fmx}
 
@@ -61,10 +61,17 @@ begin
 end;
 
 procedure TfrmPessoas.SetDados;
+var
+  Telefone : tTelefones;
 begin
+  Telefone := TTelefones.Create;
   if edtId.Text <> '' then
-    TPessoas(FEntidade).Pessoas_id := StrToInt(edtId.Text);
+    TPessoas(FEntidade).Pessoas_id := StrToInt(edtId.Text) ;
   TPessoas(FEntidade).Nome := edtRazao.Text;
+  TPessoas(FEntidade).Telefones.Add(Telefone);
+
+  TPessoas(FEntidade).Telefones[TPessoas(FEntidade).Telefones.Count -1].Numero := '984049494';
+
   inherited;
 end;
 

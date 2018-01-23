@@ -26,7 +26,7 @@ Type
   iServerControllerMetodos = interface
     ['{E20120F5-8E15-44EE-9A4F-E1BB21E48495}']
     function Get(id: integer; var ResultJson: string): iServerControllerMetodos;
-    function Post(oldId: integer; const JSON: string): iServerControllerMetodos;
+    function Post(oldId: integer; const Json: TJSONArray): iServerControllerMetodos;
     function Lista(aFiltro: string; var ResultJson: string): iServerControllerMetodos;
   end;
 

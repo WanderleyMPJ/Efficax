@@ -10,13 +10,14 @@ uses
 Type
   TControllerServicos = class(TInterfacedObject, iMetodos)
   private
-    FEntidade : TServico;
+    FEntidade: TServico;
 
     FRestCli: TSMCadastrosClient;
     function getRestCon: TDSRestConnection;
 
     procedure FormatarGrid(aGrid: TStringGrid);
-    procedure HandleRESTException(const APrefix: string; const E: TDSRestProtocolException);
+    procedure HandleRESTException(const APrefix: string;
+      const E: TDSRestProtocolException);
 
     property RestCon: TDSRestConnection read getRestCon;
 
@@ -25,8 +26,9 @@ Type
     destructor Destroy; override;
     class function New: iMetodos;
     function Open(id: integer; var getValue: iEntidade): iMetodos;
-    function Listar(aDataset: TDataSet; Filtro: string; aGrid: TStringGrid) : iMetodos;
-    function Novo : iMetodos;
+    function Listar(aDataset: TDataSet; Filtro: string; aGrid: TStringGrid)
+      : iMetodos;
+    function Novo: iMetodos;
     function Post(const SetValue: iEntidade): iMetodos;
     function Show: TForm;
 
@@ -37,7 +39,7 @@ implementation
 uses
   Model.Util, Cliente.Conection.Model,
   Client.frm.Servicos, System.JSON, System.SysUtils, FMX.Dialogs,
-  ormbr.rest.json;
+  ormbr.Rest.JSON, System.Contnrs, System.Generics.Collections;
 
 { TControllerServicos }
 
@@ -51,7 +53,6 @@ destructor TControllerServicos.Destroy;
 begin
   inherited;
 end;
-
 
 procedure TControllerServicos.FormatarGrid(aGrid: TStringGrid);
 begin
@@ -83,15 +84,15 @@ begin
       LMessage := LPair.JSONValue.Value;
     end
     else
-      LMessage :=  E.ResponseText;
+      LMessage := E.ResponseText;
   finally
     LJSONValue.Free;
   end;
   ShowMessageFmt('%s: %s', [APrefix, LMessage]);
 end;
 
-function TControllerServicos.Listar(aDataset: TDataSet; Filtro: string; aGrid: TStringGrid)
-  : iMetodos;
+function TControllerServicos.Listar(aDataset: TDataSet; Filtro: string;
+  aGrid: TStringGrid): iMetodos;
 var
   LJson: string;
 begin
@@ -103,7 +104,7 @@ begin
     FormatarGrid(aGrid);
   except
     on E: TDSRestProtocolException do
-      HandleRestException('Erro Buscando Serviços: ', E)
+      HandleRESTException('Erro Buscando Serviços: ', E)
     else
       raise;
   end;
@@ -119,18 +120,19 @@ begin
   Result := self;
 end;
 
-function TControllerServicos.Open(id: integer; var getValue: iEntidade): iMetodos;
+function TControllerServicos.Open(id: integer; var getValue: iEntidade)
+  : iMetodos;
 var
   LJson: string;
 begin
   try
-    LJson     := FRestCli.ServicoGet(id);
+    LJson := FRestCli.ServicoGet(id);
     FEntidade := TORMBrJson.JsonToObject<TServico>(LJson);
-    getValue := fEntidade as TServico;
-    Result    := self;
+    getValue := FEntidade as TServico;
+    Result := self;
   except
     on E: TDSRestProtocolException do
-      HandleRestException('Erro Buscando Serviços: ', E)
+      HandleRESTException('Erro Buscando Serviços: ', E)
     else
       raise;
   end;
@@ -138,16 +140,20 @@ end;
 
 function TControllerServicos.Post(const SetValue: iEntidade): iMetodos;
 var
-  LJson: string;
+  LList: TObjectList<TServico>;
+  LMaster: TServico;
+  JSON: TJSONArray;
 begin
   try
-    LJson := TORMBrJson.ObjectToJsonString(TServico(SetValue));
-    FRestCli.ServicoPut(TServico(setvalue).Servico_id,  LJson);
+    LList := TObjectList<TServico>.Create;
+    LMaster := SetValue as TServico;
+    LList.Add(LMaster);
+    FRestCli.ServicoPut(TServico(SetValue).Servico_id, JSON);
     ShowMessage('Dados Gravados Com Sucesso...');
-    Result    := self;
+    Result := self;
   except
     on E: TDSRestProtocolException do
-      HandleRestException('Erro Gravando Serviço: ', E)
+      HandleRESTException('Erro Gravando Serviço: ', E)
     else
       raise;
   end;

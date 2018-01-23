@@ -7,17 +7,17 @@ uses
   FMX.Forms, System.Classes, View.Base, FMX.Grid,
   Entidade.Interf, Entidade.Pessoas;
 
-
 Type
   TControllerPessoas = class(TInterfacedObject, iMetodos)
   private
-    FEntidade : TPessoas;
+    FEntidade: TPessoas;
 
     FRestCli: TSMCadastrosClient;
     function getRestCon: TDSRestConnection;
 
     procedure FormatarGrid(aGrid: TStringGrid);
-    procedure HandleRESTException(const APrefix: string; const E: TDSRestProtocolException);
+    procedure HandleRESTException(const APrefix: string;
+      const E: TDSRestProtocolException);
 
     property RestCon: TDSRestConnection read getRestCon;
 
@@ -26,8 +26,9 @@ Type
     destructor Destroy; override;
     class function New: iMetodos;
     function Open(id: integer; var getValue: iEntidade): iMetodos;
-    function Listar(aDataset: TDataSet; Filtro: string; aGrid: TStringGrid) : iMetodos;
-    function Novo : iMetodos;
+    function Listar(aDataset: TDataSet; Filtro: string; aGrid: TStringGrid)
+      : iMetodos;
+    function Novo: iMetodos;
     function Post(const SetValue: iEntidade): iMetodos;
     function Show: TForm;
 
@@ -38,7 +39,8 @@ implementation
 uses
   Model.Util, Cliente.Conection.Model,
   Client.frm.Servicos, System.JSON, System.SysUtils, FMX.Dialogs,
-  ormbr.rest.json, Client.frm.ServicosGrupo, Cliente.Frm.Pessoas;
+  ormbr.Rest.JSON, Client.frm.ServicosGrupo, Cliente.frm.Pessoas,
+  ormbr.jsonutils.Datasnap, System.Generics.Collections;
 
 { TControllerPessoas }
 
@@ -52,7 +54,6 @@ destructor TControllerPessoas.Destroy;
 begin
   inherited;
 end;
-
 
 procedure TControllerPessoas.FormatarGrid(aGrid: TStringGrid);
 begin
@@ -84,15 +85,15 @@ begin
       LMessage := LPair.JSONValue.Value;
     end
     else
-      LMessage :=  E.ResponseText;
+      LMessage := E.ResponseText;
   finally
     LJSONValue.Free;
   end;
   ShowMessageFmt('%s: %s', [APrefix, LMessage]);
 end;
 
-function TControllerPessoas.Listar(aDataset: TDataSet; Filtro: string; aGrid: TStringGrid)
-  : iMetodos;
+function TControllerPessoas.Listar(aDataset: TDataSet; Filtro: string;
+  aGrid: TStringGrid): iMetodos;
 var
   LJson: string;
 begin
@@ -104,7 +105,7 @@ begin
       FormatarGrid(aGrid);
   except
     on E: TDSRestProtocolException do
-      HandleRestException('Erro Buscando Serviços: ', E)
+      HandleRESTException('Erro Buscando Serviços: ', E)
     else
       raise;
   end;
@@ -120,18 +121,19 @@ begin
   Result := self;
 end;
 
-function TControllerPessoas.Open(id: integer; var getValue: iEntidade): iMetodos;
+function TControllerPessoas.Open(id: integer; var getValue: iEntidade)
+  : iMetodos;
 var
   LJson: string;
 begin
   try
-    LJson     := FRestCli.PessoasGet(id);
+    LJson := FRestCli.PessoasGet(id);
     FEntidade := TORMBrJson.JsonToObject<TPessoas>(LJson);
-    getValue := fEntidade as TPessoas;
-    Result    := self;
+    getValue := FEntidade as TPessoas;
+    Result := self;
   except
     on E: TDSRestProtocolException do
-      HandleRestException('Erro Buscando Serviços: ', E)
+      HandleRESTException('Erro Buscando Serviços: ', E)
     else
       raise;
   end;
@@ -139,16 +141,21 @@ end;
 
 function TControllerPessoas.Post(const SetValue: iEntidade): iMetodos;
 var
-  LJson: string;
+  JSON: TJSONArray;
+  LList: TObjectList<TPessoas>;
+  LMaster: TPessoas;
 begin
   try
-    LJson := TORMBrJson.ObjectToJsonString(TPessoas(SetValue));
-    FRestCli.PessoasPut(TPessoas(setvalue).Pessoas_ID, LJson);
+    LList := TObjectList<TPessoas>.Create;
+    LMaster := SetValue as TPessoas;
+    LList.Add(LMaster);
+    JSON := TORMBrJSONUtil.JSONStringToJSONArray<TPessoas>(LList);
+    FRestCli.PessoasPut(TPessoas(SetValue).Pessoas_ID, JSON);
     ShowMessage('Dados Gravados Com Sucesso...');
-    Result    := self;
+    Result := self;
   except
     on E: TDSRestProtocolException do
-      HandleRestException('Erro Gravando Serviço: ', E)
+      HandleRESTException('Erro Gravando Serviço: ', E)
     else
       raise;
   end;

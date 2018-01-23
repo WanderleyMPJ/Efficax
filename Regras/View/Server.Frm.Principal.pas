@@ -96,9 +96,7 @@ end;
 
 procedure TfrmPrincipal.StartBanco;
 begin
-//  Firebird.CriarBanco;
-//  sqLite.CriarBanco;
-//  db.CriarBanco;
+  db.GetConection;
 end;
 
 procedure TfrmPrincipal.StartServer;

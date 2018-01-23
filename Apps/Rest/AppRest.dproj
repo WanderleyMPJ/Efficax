@@ -178,6 +178,11 @@
         <DCCReference Include="..\..\Regras\Model\Dao\Model.Dao.OrmBr.pas"/>
         <DCCReference Include="..\..\Regras\Model\Dao\Model.Dao.Interf.pas"/>
         <DCCReference Include="..\..\Regras\Controller\Servidor\Cadastros\Servidor.Controller.Pessoas.pas"/>
+        <DCCReference Include="..\..\Regras\Model\Dao\Model.Dao.Attribute.pas"/>
+        <DCCReference Include="..\..\Regras\Model\Dao\Model.Dao.MyConection.pas"/>
+        <DCCReference Include="..\..\Regras\Model\Model.Params.pas"/>
+        <DCCReference Include="..\..\Regras\Model\Model.Params.DataBase.pas"/>
+        <DCCReference Include="..\..\Regras\Model\Model.Params.Interf.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

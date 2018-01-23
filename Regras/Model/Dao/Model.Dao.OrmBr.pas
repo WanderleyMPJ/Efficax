@@ -4,7 +4,7 @@ interface
 
 uses
   Server.Model.Conexao.Interf, OrmBr.container.objectset.interfaces,
-  Model.Dao.Interf;
+  Model.Dao.Interf, System.JSON;
 
 Type
 
@@ -18,7 +18,7 @@ Type
     Destructor Destroy; override;
     class function New(aCon: iConexaoModel): iModelEntidadeDao<M>;
     function Get(Filtro: string; var ResultJson: string): iModelEntidadeDao<M>;
-    function Post(oldId: integer; const JSON: string): iModelEntidadeDao<M>;
+    function Post(oldId: integer; const JSON: TJSONArray): iModelEntidadeDao<M>;
     function Lista(aFiltro: string; var ResultJson: string)
       : iModelEntidadeDao<M>;
   end;
@@ -80,20 +80,24 @@ begin
   Result := self.Create(aCon);
 end;
 
-function TModelDaoOrmBr<M>.Post(oldId: integer; const JSON: string)
+function TModelDaoOrmBr<M>.Post(oldId: integer; const JSON: TJSONArray)
   : iModelEntidadeDao<M>;
 var
-  oMasterNew, oMasterOld: M;
+  LMasterList: TObjectList<M>;
+  LMasterUpdate: M;
+  LFor: integer;
 begin
-  oMasterNew := TORMBrJson.JSONToObject<M>(JSON);
-
-  if oldId <= 0 then
-    FContainer.Insert(oMasterNew)
-  else
-  begin
-    OMasterOld := FContainer.Find(oldId);
-    FContainer.Modify(oMasterOld);
-    FContainer.Update(oMasterNew);
+  LMasterList := TORMBrJson.JsonToObjectList<M>(JSON.ToJSON);
+  try
+    for LFor := 0 to LMasterList.Count - 1 do
+    begin
+      LMasterUpdate := FContainer.Find(oldId);
+      FContainer.Modify(LMasterUpdate);
+      FContainer.Update(LMasterList.Items[LFor]);
+    end;
+  finally
+    LMasterList.Clear;
+    LMasterList.Free;
   end;
 end;
 

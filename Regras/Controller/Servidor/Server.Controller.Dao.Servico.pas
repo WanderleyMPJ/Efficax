@@ -4,12 +4,14 @@ interface
 
 uses
   Server.Controller.Interf, Server.Model.Conexao.Interf, System.JSON,
-  ormbr.container.objectset.interfaces, Entidade.Servico;
+  ormbr.container.objectset.interfaces, Entidade.Servico, Model.Dao.Interf;
 
 Type
   TServerControllerDaoServico = class(TInterfacedObject,
     iServerControllerMetodos)
   private
+    Dao : iModelEntidadeDao<TServico>;
+
 //    FMaster: IContainerObjectSet<TServico>;
     FCon: iConexaoModel;
     FContainer: IContainerObjectSet<TServico>;
@@ -20,7 +22,7 @@ Type
     destructor Destroy; override;
     class function New(const ACon: iConexaoModel): iServerControllerMetodos;
     function Get(id: integer; var ResultJson: string): iServerControllerMetodos;
-    function Post(oldId: integer; const JSON: string): iServerControllerMetodos;
+    function Post(oldId: integer; const Json: TJSONArray): iServerControllerMetodos;
     function Lista(aFiltro: string; var ResultJson: string)
       : iServerControllerMetodos;
   end;
@@ -98,26 +100,25 @@ begin
   Result := self.Create(ACon);
 end;
 
-function TServerControllerDaoServico.Post(oldId: integer; const JSON: string): iServerControllerMetodos;
-var
-  oMasterNew, oMasterOld: TServico;
+function TServerControllerDaoServico.Post(oldId: integer; const Json: TJSONArray): iServerControllerMetodos;
 begin
-  // try
-  oMasterNew := TORMBrJson.JSONToObject<TServico>(JSON);
-
-  if oMasterNew.Servico_id <= 0 then
-    FContainer.Insert(oMasterNew)
-  else
-  begin
-    OMasterOld := FContainer.Find(oMasternew.Servico_id);
-    FContainer.Modify(oMasterOld);
-    FContainer.Update(oMasterNew);
-  end;
-  // except
-  // on E: exception do
-  // raise exception.Create('Erro ao gravar no Banco de Dados. Erro: ' +
-  // E.Message);
-  // end;
+  Dao.Post(OldID, JSON) ;
+//  // try
+//  oMasterNew := TORMBrJson.JSONToObject<TServico>(JSON);
+//
+//  if oMasterNew.Servico_id <= 0 then
+//    FContainer.Insert(oMasterNew)
+//  else
+//  begin
+//    OMasterOld := FContainer.Find(oMasternew.Servico_id);
+//    FContainer.Modify(oMasterOld);
+//    FContainer.Update(oMasterNew);
+//  end;
+//  // except
+//  // on E: exception do
+//  // raise exception.Create('Erro ao gravar no Banco de Dados. Erro: ' +
+//  // E.Message);
+//  // end;
 end;
 
 end.

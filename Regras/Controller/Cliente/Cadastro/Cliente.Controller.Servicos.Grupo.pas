@@ -10,13 +10,14 @@ uses
 Type
   TControllerServicosGrupo = class(TInterfacedObject, iMetodos)
   private
-    FEntidade : TServicoGrupo;
+    FEntidade: TServicoGrupo;
 
     FRestCli: TSMCadastrosClient;
     function getRestCon: TDSRestConnection;
 
     procedure FormatarGrid(aGrid: TStringGrid);
-    procedure HandleRESTException(const APrefix: string; const E: TDSRestProtocolException);
+    procedure HandleRESTException(const APrefix: string;
+      const E: TDSRestProtocolException);
 
     property RestCon: TDSRestConnection read getRestCon;
 
@@ -25,8 +26,9 @@ Type
     destructor Destroy; override;
     class function New: iMetodos;
     function Open(id: integer; var getValue: iEntidade): iMetodos;
-    function Listar(aDataset: TDataSet; Filtro: string; aGrid: TStringGrid) : iMetodos;
-    function Novo : iMetodos;
+    function Listar(aDataset: TDataSet; Filtro: string; aGrid: TStringGrid)
+      : iMetodos;
+    function Novo: iMetodos;
     function Post(const SetValue: iEntidade): iMetodos;
     function Show: TForm;
 
@@ -37,7 +39,7 @@ implementation
 uses
   Model.Util, Cliente.Conection.Model,
   Client.frm.Servicos, System.JSON, System.SysUtils, FMX.Dialogs,
-  ormbr.rest.json, Client.frm.ServicosGrupo;
+  ormbr.Rest.JSON, Client.frm.ServicosGrupo, System.Generics.Collections;
 
 { TControllerServicosGrupo }
 
@@ -51,7 +53,6 @@ destructor TControllerServicosGrupo.Destroy;
 begin
   inherited;
 end;
-
 
 procedure TControllerServicosGrupo.FormatarGrid(aGrid: TStringGrid);
 begin
@@ -83,15 +84,15 @@ begin
       LMessage := LPair.JSONValue.Value;
     end
     else
-      LMessage :=  E.ResponseText;
+      LMessage := E.ResponseText;
   finally
     LJSONValue.Free;
   end;
   ShowMessageFmt('%s: %s', [APrefix, LMessage]);
 end;
 
-function TControllerServicosGrupo.Listar(aDataset: TDataSet; Filtro: string; aGrid: TStringGrid)
-  : iMetodos;
+function TControllerServicosGrupo.Listar(aDataset: TDataSet; Filtro: string;
+  aGrid: TStringGrid): iMetodos;
 var
   LJson: string;
 begin
@@ -104,7 +105,7 @@ begin
       FormatarGrid(aGrid);
   except
     on E: TDSRestProtocolException do
-      HandleRestException('Erro Buscando Serviços: ', E)
+      HandleRESTException('Erro Buscando Serviços: ', E)
     else
       raise;
   end;
@@ -120,18 +121,19 @@ begin
   Result := self;
 end;
 
-function TControllerServicosGrupo.Open(id: integer; var getValue: iEntidade): iMetodos;
+function TControllerServicosGrupo.Open(id: integer; var getValue: iEntidade)
+  : iMetodos;
 var
   LJson: string;
 begin
   try
-    LJson     := FRestCli.ServicoGrupoGet(id);
+    LJson := FRestCli.ServicoGrupoGet(id);
     FEntidade := TORMBrJson.JsonToObject<TServicoGrupo>(LJson);
-    getValue := fEntidade as TServicoGrupo;
-    Result    := self;
+    getValue := FEntidade as TServicoGrupo;
+    Result := self;
   except
     on E: TDSRestProtocolException do
-      HandleRestException('Erro Buscando Serviços: ', E)
+      HandleRESTException('Erro Buscando Serviços: ', E)
     else
       raise;
   end;
@@ -139,16 +141,20 @@ end;
 
 function TControllerServicosGrupo.Post(const SetValue: iEntidade): iMetodos;
 var
-  LJson: string;
+  LList: TObjectList<TServicoGrupo>;
+  LMaster: TServicoGrupo;
+  JSON: TJSONArray;
 begin
   try
-    LJson := TORMBrJson.ObjectToJsonString(TServicoGrupo(SetValue));
-    FRestCli.ServicoGrupoPut(TServicoGrupo(setValue).ServicoGrupo_id, LJson);
+    LList := TObjectList<TServicoGrupo>.Create;
+    LMaster := SetValue as TServicoGrupo;
+    LList.Add(LMaster);
+    FRestCli.ServicoGrupoPut(TServicoGrupo(SetValue).ServicoGrupo_id, JSON);
     ShowMessage('Dados Gravados Com Sucesso...');
-    Result    := self;
+    Result := self;
   except
     on E: TDSRestProtocolException do
-      HandleRestException('Erro Gravando Serviço: ', E)
+      HandleRESTException('Erro Gravando Serviço: ', E)
     else
       raise;
   end;

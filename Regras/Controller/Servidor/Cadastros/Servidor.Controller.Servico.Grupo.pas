@@ -19,7 +19,7 @@ Type
     destructor Destroy; override;
     class function New(const ACon: iConexaoModel): iServerControllerMetodos;
     function Get(id: integer; var ResultJson: string): iServerControllerMetodos;
-    function Post(oldId: integer; const JSON: string): iServerControllerMetodos;
+    function Post(oldId: integer; const JSON: TJSONArray): iServerControllerMetodos;
     function Lista(aFiltro: string; var ResultJson: string)
       : iServerControllerMetodos;
   end;
@@ -64,7 +64,7 @@ begin
   Result := self.Create(ACon);
 end;
 
-function TServerControllerDaoServicoGrupo.Post(oldId: integer; const JSON: string): iServerControllerMetodos;
+function TServerControllerDaoServicoGrupo.Post(oldId: integer; const JSON: TJSONArray): iServerControllerMetodos;
 begin
   Dao.Post(oldid, JSON) ;
 end;

@@ -7,19 +7,24 @@ uses
 
 Type
 
-
+  TConexaoDBStrategy = (DB);
 
   TConexaoStrategy = (Pessoas, Servicos, ServicosGrupo);
 
-  TConexaoStrategyHelper = record helper for TConexaoStrategy
+  TConexaoDBStrategyHelper = record helper for TConexaoDBStrategy
   private
     class var FConection: iConexaoModel;
-    function Conectar : iConexaoModel;
-    function GetConection: iConexaoModel;
+    function Conectar: iConexaoModel;
 
   public
-    function CriarBanco : iConexaoModel;
-    function Dao : iServerControllerMetodos;
+    function GetConection: iConexaoModel;
+  end;
+
+  TConexaoStrategyHelper = record helper for TConexaoStrategy
+  private
+
+  public
+    function Dao: iServerControllerMetodos;
   end;
 
 implementation
@@ -29,35 +34,32 @@ uses
 
 { TConexaoStrategyHelper }
 
-function TConexaoStrategyHelper.Conectar: iConexaoModel;
-begin
-  TConexaoModel.New().Firebird.BuildDatabase;
-  fconection := tconexaomodel.New().ThisAs;
-  Result      := FConection;
-end;
-
-function TConexaoStrategyHelper.CriarBanco: iConexaoModel;
-begin
-  Result := Conectar;
-end;
-
 function TConexaoStrategyHelper.Dao: iServerControllerMetodos;
 begin
   case self of
     Pessoas:
-     Result := TServerController.New(GetConection).Dao.Pessoas;
+      Result := TServerController.New(DB.GetConection).Dao.Pessoas;
     Servicos:
-      Result := TServerController.New(GetConection).Dao.Servico;
+      Result := TServerController.New(DB.GetConection).Dao.Servico;
     ServicosGrupo:
-      Result := TServerController.New(GetConection).Dao.ServicoGrupo;
+      Result := TServerController.New(DB.GetConection).Dao.ServicoGrupo;
   end;
 end;
 
-function TConexaoStrategyHelper.GetConection: iConexaoModel;
+{ TConexaoDBStrategyHelper }
+
+function TConexaoDBStrategyHelper.Conectar: iConexaoModel;
 begin
-  if not Assigned(Fconection) then
-    conectar;
-  Result := fconection;
+  TConexaoModel.New().Firebird.BuildDatabase;
+  FConection := TConexaoModel.New().ThisAs;
+  Result := FConection;
+end;
+
+function TConexaoDBStrategyHelper.GetConection: iConexaoModel;
+begin
+  if not Assigned(FConection) then
+    Conectar;
+  Result := FConection;
 end;
 
 end.

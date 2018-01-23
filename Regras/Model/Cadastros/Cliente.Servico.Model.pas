@@ -74,11 +74,14 @@ end;
 
 function TServicoModel.Post(var AValue: iEntidade): iOperacoes;
 var
+  LList : TObjectList<TServico>;
   LMaster: TServico;
-  Json : string;
+  Json : TJSONArray;
 begin
+  LList := TObjectList<TServico>.create;
   LMaster := AValue as TServico;
-  JSon := TORMBrJson.ObjectToJsonString(LMaster);
+  LList.Add(LMaster);
+  JSON := TORMBrJSONUtil.JSONStringToJSONArray<TServico>(LList);
   FRestCli.ServicoPut(LMaster.Servico_id, Json);
   Result := self;
 end;

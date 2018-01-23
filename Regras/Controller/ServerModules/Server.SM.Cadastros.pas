@@ -15,15 +15,15 @@ type
     { Public declarations }
     function PessoasGet(id: integer): string;
     function PessoasLista(aFiltro: string) : String;
-    function PessoasPut(oldId: integer; const AJson: String): string;
+    function PessoasPut(oldId: integer; const AJson: TJSONArray): string;
 
     function ServicoGet(id: integer) : String;
     function ServicoLista(aFiltro: string) : String;
-    function ServicoPut(oldId: integer; const  AJson: String): string;
+    function ServicoPut(oldId: integer; const  AJson: TJSONArray): string;
 
     function ServicoGrupoGet(id: integer) : String;
     function ServicoGrupoLista(aFiltro: string) : String;
-    function ServicoGrupoPut(oldId: integer; const AJson: String): string;
+    function ServicoGrupoPut(oldId: integer; const AJson: TJSONArray): string;
 
   end;
 
@@ -45,7 +45,7 @@ begin
   Pessoas.Dao.Lista(aFiltro, Result);
 end;
 
-function TSMCadastros.PessoasPut(oldId: integer; const AJson: String): string;
+function TSMCadastros.PessoasPut(oldId: integer; const AJson: TJSONArray): string;
 begin
   Pessoas.Dao.Post(oldid, AJson);
 end;
@@ -65,7 +65,7 @@ begin
   ServicosGrupo.Dao.Lista(aFiltro, Result);
 end;
 
-function TSMCadastros.ServicoGrupoPut(oldId: integer; const AJson: String): string;
+function TSMCadastros.ServicoGrupoPut(oldId: integer; const AJson: TJSONArray): string;
 begin
   ServicosGrupo.Dao.Post(oldid, AJson);
 end;
@@ -75,7 +75,7 @@ begin
   Servicos.Dao.Lista(aFiltro, Result);
 end;
 
-function TSMCadastros.ServicoPut(oldId: integer; const  AJson: String): string;
+function TSMCadastros.ServicoPut(oldId: integer; const  AJson: TJSONArray): string;
 begin
   Servicos.Dao.Post(oldid, AJson);
 end;
